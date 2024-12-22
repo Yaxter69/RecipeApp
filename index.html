@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рецепты по ингредиентам</title>
+</head>
+
+<body>
+    <h1>Найдите рецепты по ингредиентам</h1>
+    <input type="text" id="ingredients" placeholder="Введите ингредиенты (через запятую)">
+    <button id="searchBtn">Поиск</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('searchBtn').addEventListener('click', function () {
+            const ingredients = document.getElementById('ingredients').value;
+            const apiKey = 'e37c378c8c324c77ae284a424a896671'; // замените на свой API Key
+            const url = `https://spoonacular.com/articles/featured-recipes?q=search%20for%20recipes%20by%20ingredients&apiKey=${apiKey}&ingredients=${ingredients}&number=10&ranking=1&ignorePantry=true`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = '';
+
+                    data.forEach(recipe => {
+                        const recipeItem = document.createElement('div');
+                        recipeItem.innerHTML = `
+                            <h2>${recipe.title}</h2>
+                            <img src="${recipe.image}" alt="${recipe.title}">
+                        `;
+                        resultsDiv.appendChild(recipeItem);
+                    });
+                })
+                .catch(error => console.error('Ошибка:', error));
+        });
+    </script>
+</body>
+
+</html>
